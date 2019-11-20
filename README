@@ -1,5 +1,31 @@
 
+NOTES!
+-------
+-------
 
+task 0:
+-------
+unpack which can unpack multiple packed files (a.k.a “archives”),
+and even traverse folders recursively and unpack all archives in them - regardless of the
+specific algorithm that was used when packing them. Following is the exact synopsis:
+unpack [-r] [-v] file [file...]
+
+
+task 2:
+-------
+
+psping which checks periodically if a specific executable has a
+live process. Following is the exact synopsis:
+psping [-c ###] [-t ###] [-u user-name] exe-name
+Counts and echos number of live processes for a user, whose executable file is exe-name.
+Repeats this every second indefinitely, unless passed other specifications using switches:
+-c - limit amount of pings, e.g. -c 3. Default is infinite
+-t - define alternative timeout in seconds, e.g. -t 5. Default is 1 sec
+-u - define user to check process for. Default is ANY user.
+ 
+
+
+--------------------------------------
 
 to make an alias to run command without ./
 
@@ -23,26 +49,7 @@ enjoy!
 
 
 ------------------------------------------------------
-NOTES!
--------
--------
 
-task 0:
--------
-I changed unpack to decompress files to path /extracted
-to avoid repeated overwrittes
-
-
-task 2:
--------
-works as expected
-It checks periodically if a specific executable has a
-live process. 
-
-
---------------------------------------
-i tried to make a script that adds alias but its limited to  script lifetime
-: '
 
 
  shopt -s expand_aliases
