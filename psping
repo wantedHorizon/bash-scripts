@@ -1,0 +1,123 @@
+
+	
+
+	func() {
+		 while read line; do
+		 echo $line
+		let "ctr +=1"
+		done
+	return $ctr;
+	}
+	pinglimit=-1
+user="any"
+timeout=1
+   while test $# -gt 0; do
+           case "$1" in
+                -t)
+                    shift
+                    timeout=$1
+                    shift
+                    ;;
+                -c)
+                    shift
+                    pinglimit=$1
+                    shift
+                    ;;
+                -u)
+                    shift
+                    user=$1
+                    shift
+                    ;;   
+                *)
+                   name=$1
+                   shift
+                   ;;
+          esac
+  done  
+
+  echo "timeout argument : $timeout";
+  echo "pinglimit argument : $pinglimit";
+  echo "user argument : $user";
+  echo "$name";
+
+  if [[ -z $name ]] ; then
+  	echo "syntax-error no process name input"
+  fi	
+
+ 		
+ctr=0;
+echo "Pinging '$name' for user: '$user'"
+while [[ $pinglimit -eq -1 ]] || [[ current -le $pinglimit ]] ; 
+do
+	echo -n "$name: "
+	
+	if [[ $user != "any" ]] ; then
+		ps -C $name -u $user | { while read line; do
+			  
+			let "ctr +=1"
+			echo $line
+					
+
+
+		done 
+			echo $ctr
+					
+					let "ctr -=1"
+						echo "$ctr instace(s)..."
+					}
+
+
+	else
+		ps -C $name |{ 
+			while read line ; do
+			  
+			let "ctr +=1"
+			
+					
+
+		done 
+					let "ctr -=1"
+						echo "$ctr instace(s)..."
+
+			}
+
+		
+	fi	
+	
+	
+	#echo "$current"
+	sleep $timeout ;
+	let "current +=1"
+
+done
+
+
+
+
+
+
+: '
+pinglimit=-1
+user="all"
+timeout=1
+
+count=0
+for file in $@ ;
+do
+  echo "$file $count"
+  let "count += 1"
+
+  if [[ "-c" == $file ]] ; then
+  	pinglimit=$$count
+
+  elif [[ "-u" == $file ]] ; then
+  	user=$$count
+  elif [[ "-t" == $file ]] ; then
+  	timeout=$$count
+  fi	
+  
+done
+
+echo "timout= $timout , pinglimit= $pinglimit ,user= $user "
+
+'

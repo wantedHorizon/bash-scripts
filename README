@@ -1,0 +1,57 @@
+
+
+
+to make an alias to run command without ./
+
+
+run in your terminal 
+
+make files executable
+1)
+chmod 755 path/unpack
+chmod 755 path/psping
+
+
+
+*path= full path to files unpack/psping
+2)
+alias unpack= "*path/unpack"
+alias psping= "*path/psping"
+
+
+enjoy!
+
+
+------------------------------------------------------
+NOTES!
+-------
+-------
+
+task 0:
+-------
+I changed unpack to decompress files to path /extracted
+to avoid repeated overwrittes
+
+
+task 2:
+-------
+works as expected
+It checks periodically if a specific executable has a
+live process. 
+
+
+--------------------------------------
+i tried to make a script that adds alias but its limited to  script lifetime
+: '
+
+
+ shopt -s expand_aliases
+
+loc="$(pwd)"
+echo $loc
+
+
+ alias psping="./$loc/psping"
+ alias unpck="./$loc/unpack"
+
+alias '

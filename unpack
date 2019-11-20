@@ -1,0 +1,235 @@
+
+NUM=0
+fail=0
+COUNT=0
+
+
+extract_all() {
+
+  if [[ "gzip" == "${arr[1]}" ]]; then
+  gunzip -c -k $file > "extracted/${file}_gunziped"
+  let "COUNT += 1"
+    if [[ $V -eq 1 ]] ; then
+      echo "Unpacking $file ..."
+    fi  
+
+  elif [[ "bzip2" == "${arr[1]}" ]]; then
+  bunzip2 -fqck $file > "extracted/${file}bunzipd2" 
+  let "COUNT += 1"
+    if [[ $V -eq 1 ]] ; then
+      echo "Unpacking $file ..."
+    fi  
+
+  elif [[ "Zip" == "${arr[1]}" ]]; then
+  unzip -oq $file -d extracted
+  let "COUNT += 1"
+    if [[ $V -eq 1 ]] ; then
+      echo "Unpacking $file ..."
+    fi  
+
+  elif [[ "compress'd" == "${arr[1]}" ]]; then
+  uncompress -fqck $file > "extracted/${file}_uncompress" 
+    let "COUNT += 1"
+    if [[ $V -eq 1 ]] ; then
+      echo "Unpacking $file ..."
+    fi  
+
+  
+  elif [[ "directory" == "${arr[1]}" ]] && [[ $file != "extracted" ]] ; then
+    loc=$(pwd)
+    echo "$(pwd)"
+    cd $file
+    mkdir -p extracted
+
+    (extract_all)
+    echo "$(pwd)"
+    if [[ $V -eq 1 ]] ; then
+      echo "Unpacking $file ..."
+    fi  
+
+    cd $loc
+    echo "$(pwd)" 
+      
+  else   
+    let "fail +=1"
+    if [[ $V -eq 1 ]] ; then
+      echo "Ignoring $file "
+    fi  
+
+fi
+for file in *
+do 
+	TYPE=$(file $file) 
+	#echo "$TYPE"
+   	read -a arr <<< $TYPE
+
+
+   #	echo "${arr[1]}"
+  # 	if [[ "${arr[1]}"  == "gzip"]] ; then
+  # 		echo "gzip file"
+  # 	done	
+
+  if [[ "gzip" == "${arr[1]}" ]]; then
+  gunzip -c -k $file > "extracted/${file}_gunziped"
+  let "COUNT += 1"
+  	if [[ $V -eq 1 ]] ; then
+  		echo "Unpacking $file ..."
+  	fi	
+
+  elif [[ "bzip2" == "${arr[1]}" ]]; then
+  bunzip2 -fqck $file > "extracted/${file}bunzipd2" 
+  let "COUNT += 1"
+  	if [[ $V -eq 1 ]] ; then
+  		echo "Unpacking $file ..."
+  	fi	
+
+  elif [[ "Zip" == "${arr[1]}" ]]; then
+  unzip -oq $file -d extracted
+  let "COUNT += 1"
+  	if [[ $V -eq 1 ]] ; then
+  		echo "Unpacking $file ..."
+  	fi	
+
+  elif [[ "compress'd" == "${arr[1]}" ]]; then
+  uncompress -fqck $file > "extracted/${file}_uncompress" 
+    let "COUNT += 1"
+    if [[ $V -eq 1 ]] ; then
+  		echo "Unpacking $file ..."
+  	fi	
+
+  
+  elif [[ "directory" == "${arr[1]}" ]] && [[ $file != "extracted" ]] ; then
+  	loc=$(pwd)
+  	echo "$(pwd)"
+  	cd $file
+  	mkdir -p extracted
+
+  	(extract_all)
+  	echo "$(pwd)"
+  	if [[ $V -eq 1 ]] ; then
+  		echo "Unpacking $file ..."
+  	fi	
+
+  	cd $loc
+  	echo "$(pwd)" 
+  		
+  else   
+  	let "fail +=1"
+  	if [[ $V -eq 1 ]] ; then
+  		echo "Ignoring $file "
+  	fi	
+
+fi
+  	
+
+
+echo "count= $COUNT , fail= $fail"
+  
+done
+let "NUM+=COUNT"
+return $fail
+
+}
+
+
+mkdir -p extracted
+ #!/bin/bash
+  
+ R=0
+ V=0
+
+
+echo "$*"
+if [[ $1 == *-v* ]]; then
+V=1
+
+fi
+
+if [[ $* == *-r* ]] ; then
+
+R=1
+extract_all
+
+else 
+
+for file in $*
+do
+ 
+  if [[ $file != "-v" ]] && [[ $file != "-r" ]] ; then
+    TYPE=$(file $file) 
+  #echo "$TYPE"
+    read -a arr <<< $TYPE
+
+
+     echo "${arr[1]}"
+
+
+                if [[ "gzip" == "${arr[1]}" ]]; then
+                gunzip -c -k $file > "extracted/${file}_gunziped"
+                let "COUNT += 1"
+                  if [[ $V -eq 1 ]] ; then
+                    echo "Unpacking $file ..."
+                  fi  
+
+                elif [[ "bzip2" == "${arr[1]}" ]]; then
+                bunzip2 -fqck $file > "extracted/${file}bunzipd2" 
+                let "COUNT += 1"
+                  if [[ $V -eq 1 ]] ; then
+                    echo "Unpacking $file ..."
+                  fi  
+
+                elif [[ "Zip" == "${arr[1]}" ]]; then
+                unzip -oq $file -d extracted
+                let "COUNT += 1"
+                  if [[ $V -eq 1 ]] ; then
+                    echo "Unpacking $file ..."
+                  fi  
+
+                elif [[ "compress'd" == "${arr[1]}" ]]; then
+                uncompress -fqck $file > "extracted/${file}_uncompress" 
+                  let "COUNT += 1"
+                  if [[ $V -eq 1 ]] ; then
+                    echo "Unpacking $file ..."
+                  fi  
+
+                
+                elif [[ "directory" == "${arr[1]}" ]] && [[ $file != "extracted" ]] ; then
+                  loc=$(pwd)
+                  echo "$(pwd)"
+                  cd $file
+                  mkdir -p extracted
+
+                  (extract_all)
+                 # echo "$(pwd)"
+                  if [[ $V -eq 1 ]] ; then
+                    echo "Unpacking $file ..."
+                  fi  
+
+                  cd $loc
+                 # echo "$(pwd)" 
+                    
+                else   
+                  let "fail +=1"
+                  if [[ $V -eq 1 ]] ; then
+                    echo "Ignoring $file "
+                  fi  
+
+              fi
+
+  fi #end for check its real file or dir
+  
+done
+fi
+
+
+
+
+echo "Decompressed $NUM archive(s)"
+
+#return $fail
+
+
+
+
+
+
